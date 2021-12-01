@@ -59,7 +59,7 @@ module Chatform::Utils
         object_func = ->(obj, _keys, _state) {
           return obj[:schema_enabled] if obj.is_a?(Hash)
         }
-        JsonUtil.generate(object, opts: PRETTY_STATE_PROTOTYPE, value_func: value_func, object_func: object_func)
+        JsonUtil.new(opts: PRETTY_STATE_PROTOTYPE, value_func: value_func, object_func: object_func).generate(object)
       end
     end
   end

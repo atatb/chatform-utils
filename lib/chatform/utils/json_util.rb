@@ -11,14 +11,10 @@ module Chatform
         array_nl: "\n"
       }.freeze
 
-      def self.generate(object, opts: PRETTY_STATE_PROTOTYPE, value_func: nil, object_func: nil)
-        JsonUtil.new(opts, value_func, object_func).generate(object)
-      end
-
       # params:
       #   value_func: ->(v, _keys, _state) { v }
       #   object_func: ->(_obj, _keys, _state
-      def initialize(opts, value_func, object_func)
+      def initialize(opts: PRETTY_STATE_PROTOTYPE, value_func:, object_func:)
         @value_func = value_func
         @object_func = object_func
         # JSON::Ext::Generator::State
