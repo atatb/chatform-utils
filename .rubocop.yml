@@ -1,0 +1,169 @@
+require:
+  - rubocop-performance
+  - rubocop-rspec
+AllCops:
+  NewCops: enable
+  Exclude:
+    - 'node_modules/**/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+    - '.git/**/*'
+    - 'db/schema.rb'
+    - 'db/fixtures/**/*'
+    - 'db/migrate/**/*'
+    - 'config/initializers/*'
+    - 'bin/**/*'
+    # - 'test/**/*'
+    # - 'config/**/*'
+    # - 'lib/**/*'
+    - 'app/lib/ansi.rb'
+    # - 'app/views/**/*'
+
+Lint/Void:
+  Exclude:
+    - 'script/**/*'
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    - 'script/**/*'
+Style/StringConcatenation:
+  Enabled: false
+Style/CaseLikeIf:
+  Enabled: false
+Style/OptionalBooleanParameter:
+  Enabled: false
+
+Lint/AmbiguousOperatorPrecedence:
+  Enabled: false
+
+# Use `!empty?` instead of `size > 0`.
+Style/ZeroLengthPredicate:
+  Enabled: false
+
+Style/TrailingCommaInHashLiteral:
+  Enabled: false
+Style/TrailingCommaInArguments:
+  Enabled: false
+Style/TrailingCommaInArrayLiteral:
+  Enabled: false
+
+Style/HashEachMethods:
+  Enabled: false
+Style/HashTransformKeys:
+  Enabled: true
+Style/HashTransformValues:
+  Enabled: true
+
+Style/Documentation:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 160
+
+Metrics/BlockLength:
+  Max: 50
+  Exclude:
+    - 'spec/**/*'
+
+Style/RedundantSelf:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Metrics/ParameterLists:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Style/Alias:
+  Enabled: false
+
+Layout/SpaceInsideStringInterpolation:
+  Enabled: false
+
+Style/Lambda:
+  Enabled: false
+
+Lint/UnusedMethodArgument:
+  Enabled: false
+
+Style/AsciiComments:
+  Enabled: false
+
+Metrics/BlockNesting:
+  Max: 5
+
+Style/RescueModifier:
+  Enabled: false
+
+Style/IfInsideElse:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/SymbolProc:
+  Enabled: false
+
+Style/ClassVars:
+  Enabled: false
+
+Naming/MethodName:
+  Enabled: false
+
+Security/Eval:
+  Enabled: false
+
+Style/CommentedKeyword:
+  Enabled: false
+
+Style/RedundantReturn:
+  Enabled: false
+
+Style/NumericPredicate:
+  Enabled: false
+
+Bundler/OrderedGems:
+  Enabled: false
+
+Style/SymbolArray:
+  Enabled: false
+
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
+
+Rails/FilePath:
+  Enabled: false
+Rails/HttpStatus:
+  Enabled: false
+
+RSpec/EmptyLineAfterSubject:
+  Enabled: false
+RSpec/EmptyLineAfterFinalLet:
+  Enabled: false
+RSpec/ExampleLength:
+  Max: 30
+RSpec/MultipleExpectations:
+  Max: 20
+RSpec/NestedGroups:
+  Max: 4
+RSpec/HookArgument:
+  Enabled: false
+RSpec/MultipleMemoizedHelpers:
+  Max: 17
