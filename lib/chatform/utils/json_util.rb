@@ -14,7 +14,7 @@ module Chatform
       # params:
       #   value_func: ->(v, _keys, _state) { v }
       #   object_func: ->(_obj, _keys, _state
-      def initialize(opts: PRETTY_STATE_PROTOTYPE, value_func:, object_func:)
+      def initialize(opts: PRETTY_STATE_PROTOTYPE, value_func: nil, object_func: nil)
         @value_func = value_func
         @object_func = object_func
         # JSON::Ext::Generator::State
@@ -23,6 +23,7 @@ module Chatform
       end
 
       # Ref: https://github.com/flori/json/blob/master/lib/json/pure/generator.rb
+      # https://github.com/ruby/json/blob/master/lib/json/truffle_ruby/generator.rb#L328
       def generate(obj, keys: [])
         return if @object_func && @object_func.call(obj, keys, @state) == false
 
