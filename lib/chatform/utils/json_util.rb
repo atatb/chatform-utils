@@ -44,8 +44,8 @@ module Chatform
       # Ref: https://github.com/flori/json/blob/master/lib/json/pure/generator.rb#L294
       def hash_to_json(obj, keys) # {{{
         delim = ','
-        delim << state.object_nl
-        result = '{'
+        delim = delim + state.object_nl
+        result = String.new('{')
         result << state.object_nl
         depth = state.depth += 1
         first = true
@@ -77,15 +77,15 @@ module Chatform
       # Ref: https://github.com/flori/json/blob/master/lib/json/pure/generator.rb#L337
       def array_to_json(obj, keys) # {{{
         delim = ','
-        delim << state.array_nl
-        result = '['
-        result << state.array_nl
+        delim = delim + state.array_nl
+        result = String.new('[')
         depth = state.depth += 1
         first = true
         indent = !state.array_nl.empty?
         obj.each do |value|
           v = generate(value, keys: keys)
           next if v.nil? || v == nil.to_json(state)
+          result << state.array_nl if first
           result << delim unless first
           result << state.indent * depth if indent
           # result << generate(value, state, keys: keys)
@@ -98,8 +98,8 @@ module Chatform
           first = false
         end
         depth = state.depth -= 1
-        result << state.array_nl
-        result << state.indent * depth if indent
+        result << state.array_nl unless first
+        result << state.indent * depth if indent && !first
         result << ']'
         result
       end # }}}
