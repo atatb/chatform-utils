@@ -148,7 +148,7 @@ describe Chatform::Utils::JsonUtil2 do
     end
 
     it 'raises ArgumentError for non-Hash options' do
-      expect { described_class.with_options('invalid') }.to raise_error(ArgumentError, 'Options must be a Hash')
+      expect { described_class.with_options('invalid') }.to raise_error(Chatform::Utils::InvalidPatternError, 'Options must be a Hash')
     end
   end
 
@@ -176,7 +176,7 @@ describe Chatform::Utils::JsonUtil2 do
     end
 
     it 'raises error when no block given' do
-      expect { subject.add_handler }.to raise_error(Chatform::Utils::JsonUtil2::InvalidHandlerError, 'Handler block is required')
+      expect { subject.add_handler }.to raise_error(Chatform::Utils::InvalidHandlerError, 'Handler block is required')
     end
   end
 
@@ -241,11 +241,11 @@ describe Chatform::Utils::JsonUtil2 do
     end
 
     it 'raises error for invalid type' do
-      expect { subject.handle_type('not a class') {} }.to raise_error(ArgumentError, 'Type must be a Class or Module')
+      expect { subject.handle_type('not a class') {} }.to raise_error(Chatform::Utils::InvalidPatternError, 'Type must be a Class or Module')
     end
 
     it 'raises error when no block given' do
-      expect { subject.handle_type(String) }.to raise_error(Chatform::Utils::JsonUtil2::InvalidHandlerError)
+      expect { subject.handle_type(String) }.to raise_error(Chatform::Utils::InvalidHandlerError)
     end
   end
 
@@ -364,11 +364,11 @@ describe Chatform::Utils::JsonUtil2 do
     end
 
     it 'raises error for invalid pattern' do
-      expect { subject.at_path(123) {} }.to raise_error(Chatform::Utils::JsonUtil2::InvalidPatternError)
+      expect { subject.at_path(123) {} }.to raise_error(Chatform::Utils::InvalidPatternError)
     end
 
     it 'raises error when no block given' do
-      expect { subject.at_path('test.path') }.to raise_error(Chatform::Utils::JsonUtil2::InvalidHandlerError)
+      expect { subject.at_path('test.path') }.to raise_error(Chatform::Utils::InvalidHandlerError)
     end
   end
 

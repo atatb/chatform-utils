@@ -6,9 +6,6 @@ module Chatform
   module Utils
     # Enhanced JSON generator with customizable handlers and formatting options
     class JsonUtil2
-      class Error < StandardError; end
-      class InvalidHandlerError < Error; end
-      class InvalidPatternError < Error; end
       PRETTY_STATE_PROTOTYPE = {
         indent: '  ',
         space: ' ',
@@ -51,7 +48,7 @@ module Chatform
       # @param sort_keys [Boolean] whether to sort hash keys
       # @return [JsonUtil2] new instance
       def self.with_options(opts, skip_nil: true, sort_keys: false)
-        raise ArgumentError, 'Options must be a Hash' unless opts.is_a?(Hash)
+        raise InvalidPatternError, 'Options must be a Hash' unless opts.is_a?(Hash)
         new(format: opts, skip_nil: skip_nil, sort_keys: sort_keys)
       end
 
@@ -92,7 +89,7 @@ module Chatform
       # @yield [obj, keys, state] handler block for matching objects
       # @return [self] for method chaining
       def handle_type(type, &block)
-        raise ArgumentError, 'Type must be a Class or Module' unless type.is_a?(Class) || type.is_a?(Module)
+        raise InvalidPatternError, 'Type must be a Class or Module' unless type.is_a?(Class) || type.is_a?(Module)
         raise InvalidHandlerError, 'Handler block is required' unless block_given?
 
         add_handler do |obj, keys, state|
@@ -202,6 +199,12 @@ module Chatform
 
       attr_reader :state
 
+      # Check if value should be skipped
+      def should_skip_value?(value)
+        return false unless @skip_nil
+        value.nil? || value == nil.to_json(@state)
+      end
+
       # Convert Hash to JSON string
       def hash_to_json(obj, keys) # {{{
         delim = ','
@@ -218,14 +221,7 @@ module Chatform
 
         entries.each do |key, value|
           v = generate(value, keys: keys + [key])
-
-          # Handle nil values based on configuration
-          if v.nil?
-            next if @skip_nil
-            v = nil.to_json(state)
-          elsif v == nil.to_json(state)
-            next if @skip_nil
-          end
+          next if should_skip_value?(v)
 
           result << delim unless first
           result << state.indent * depth if indent
@@ -257,14 +253,7 @@ module Chatform
 
         obj.each_with_index do |value, index|
           v = generate(value, keys: keys + [index])
-
-          # Handle nil values based on configuration
-          if v.nil?
-            next if @skip_nil
-            v = nil.to_json(state)
-          elsif v == nil.to_json(state)
-            next if @skip_nil
-          end
+          next if should_skip_value?(v)
 
           result << delim unless first
           result << state.indent * depth if indent
@@ -273,7 +262,7 @@ module Chatform
         end
 
         depth = state.depth -= 1
-        result << state.array_nl unless first
+        result << state.array_nl unless first # Avoid empty array with double newlines
         result << state.indent * depth if indent
         result << ']'
         result.string
