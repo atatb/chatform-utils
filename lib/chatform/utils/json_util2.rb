@@ -50,6 +50,20 @@ module Chatform
         self
       end
 
+      # Helper method {{{
+      # 型別ハンドラー
+      def handle_type(type, &block)
+        add_handler do |obj, keys, state|
+          if obj.is_a?(type)
+            result = block.call(obj, keys, state)
+            # blockがnilを返した場合は要素をスキップ
+            result.nil? ? nil : result
+          else
+            :continue
+          end
+        end
+      end
+
       # value_func互換のハンドラーを追加
       def add_value_handler(&block)
         add_handler do |obj, keys, state|
@@ -61,6 +75,42 @@ module Chatform
           end
         end
       end
+
+      # 条件付きフィルタ
+      def filter(&condition)
+        add_handler do |obj, keys, state|
+          condition.call(obj, keys, state) ? nil : :continue
+        end
+      end
+
+      # キーベースのハンドラー
+      def for_key(key_pattern, &block)
+        add_handler do |obj, keys, state|
+          last_key = keys.last
+          matches = case key_pattern
+          when Symbol, String then last_key == key_pattern
+          when Regexp then last_key.to_s =~ key_pattern
+          else false
+          end
+
+          matches ? block.call(obj, keys, state) : :continue
+        end
+      end
+
+      # パスベースのハンドラー
+      def at_path(path_pattern, &block)
+        add_handler do |obj, keys, state|
+          current_path = keys.map(&:to_s).join('.')
+          matches = case path_pattern
+          when String then current_path == path_pattern
+          when Regexp then current_path =~ path_pattern
+          else false
+          end
+
+          matches ? block.call(obj, keys, state) : :continue
+        end
+      end
+      # }}}
 
       # Ref: https://github.com/flori/json/blob/master/lib/json/pure/generator.rb
       # https://github.com/ruby/json/blob/master/lib/json/truffle_ruby/generator.rb#L328
