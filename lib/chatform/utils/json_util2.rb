@@ -50,6 +50,18 @@ module Chatform
         self
       end
 
+      # value_func互換のハンドラーを追加
+      def add_value_handler(&block)
+        add_handler do |obj, keys, state|
+          # Hash/Array以外の場合のみblockを実行
+          if !obj.is_a?(Hash) && !obj.is_a?(Array)
+            block.call(obj, keys, state)
+          else
+            :continue
+          end
+        end
+      end
+
       # Ref: https://github.com/flori/json/blob/master/lib/json/pure/generator.rb
       # https://github.com/ruby/json/blob/master/lib/json/truffle_ruby/generator.rb#L328
       def generate(obj, keys: [])
